@@ -1,0 +1,69 @@
+# .gitignore for .NET Web API + Vite React TypeScript
+
+####################
+# .NET Web API     #
+####################
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider files (if using Rider)
+.idea/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+
+# SQLite database files (if applicable)
+*.db
+
+# Logs
+*.log
+
+# ASP.NET Scaffolding folder
+Scaffolding/
+
+####################
+# Node.js (React)  #
+####################
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directory
+node_modules/
+node_modules/.cache/
+
+# Build output
+dist/
+
+# Vite cache
+.vite/
+
+###################
+# Environment vars #
+###################
+.env
+.env.local
+.env.*.local
+
+######################
+# IDE-specific files #
+######################
+# Visual Studio Code
+.vscode/
+
+####################
+# macOS generated  #
+####################
+.DS_Store
+Thumbs.db
