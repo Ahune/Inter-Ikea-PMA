@@ -13,7 +13,7 @@ public class SeedData
 
         if (!context.ProductTypes.Any())
         {
-            var productTypes = File.ReadAllLines("Data/product-types.txt");
+            var productTypes = File.ReadAllLines("./Infrastructure/Persistance/Data/product-type.txt");
             foreach (var productType in productTypes)
             {
                 context.ProductTypes.Add(new ProductType { Name = productType });
@@ -23,7 +23,7 @@ public class SeedData
 
         if (!context.Colours.Any())
         {
-            var colours = File.ReadAllLines("Data/colours.txt");
+            var colours = File.ReadAllLines("./Infrastructure/Persistance/Data/colour.txt");
             foreach (var colour in colours)
             {
                 context.Colours.Add(new Colour { Name = colour });
