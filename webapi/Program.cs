@@ -1,48 +1,67 @@
+using Microsoft.EntityFrameworkCore;
+using ProductManagementApp.Infrastructure.Persistence;
 using Scalar.AspNetCore;
+using webapi.Infrastructure.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Configure Services
+builder.ConfigureServices();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{   
-    app.MapScalarApiReference(opt => {
-        opt.Title = "Hello developers of IKEA INTER";
-        opt.Theme = ScalarTheme.Mars;
-        opt.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
-    });
-    app.MapOpenApi();
-}
+// Configure Pipeline
+app.ConfigurePipeline(app.Environment);
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+// Seed Data
+app.SeedDatabase();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+// Extension Methods
+public static class WebApplicationBuilderExtensions
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public static void ConfigureServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddControllers();
+        builder.Services.AddOpenApi();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    }
+}
+
+public static class WebApplicationExtensions
+{
+    public static void ConfigurePipeline(this WebApplication app, IWebHostEnvironment environment)
+    {
+        if (environment.IsDevelopment())
+        {
+            app.MapScalarApiReference(opt =>
+            {
+                opt.Title = "Hello developers of IKEA INTER";
+                opt.Theme = ScalarTheme.Mars;
+                opt.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+            });
+            app.MapOpenApi();
+        }
+
+        app.UseHttpsRedirection();
+        app.MapControllers();
+    }
+
+    public static void SeedDatabase(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<AppDbContext>();
+            SeedData.Seed(context);
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred seeding the DB.");
+        }
+    }
 }
