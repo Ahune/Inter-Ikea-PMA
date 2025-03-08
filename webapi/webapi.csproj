@@ -19,9 +19,7 @@
   <ItemGroup>
     <Folder Include="Application/" />
     <Folder Include="Application/Services/" />
-    <Folder Include="Domain/" />
-    <Folder Include="Domain/Entities/" />
-    <Folder Include="Infrastructure/" />
+    <Folder Include="Infrastructure/Persistance/Data/" />
     <Folder Include="Infrastructure/Repositories/" />
     <Folder Include="Presentation/" />
     <Folder Include="Presentation/Controllers/" />
