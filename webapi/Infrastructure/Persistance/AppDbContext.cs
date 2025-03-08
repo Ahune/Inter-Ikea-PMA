@@ -23,18 +23,18 @@ namespace ProductManagementApp.Infrastructure.Persistence
                 .HasForeignKey(p => p.ProductTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.Colours)
-                .WithMany(c => c.Products)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductColours",
-                    j => j.HasOne<Colour>()
-                        .WithMany()
-                        .HasForeignKey("ColourId"),
-                    j => j.HasOne<Product>()
-                    .WithMany()
-                    .HasForeignKey("ProductId")
-                );
+            modelBuilder.Entity<ProductColour>()
+                .HasKey(pc => new { pc.ProductId, pc.ColourId });
+
+            modelBuilder.Entity<ProductColour>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductColours)
+                .HasForeignKey(pc => pc.ProductId);
+
+            modelBuilder.Entity<ProductColour>()
+                .HasOne(pc => pc.Colour)
+                .WithMany(c => c.ProductColours)
+                .HasForeignKey(pc => pc.ColourId);
         }
     }
 }
