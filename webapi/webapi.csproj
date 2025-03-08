@@ -8,6 +8,24 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Scalar.AspnetCore" Version="2.0.26" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application/" />
+    <Folder Include="Application/Services/" />
+    <Folder Include="Domain/" />
+    <Folder Include="Domain/Entities/" />
+    <Folder Include="Infrastructure/" />
+    <Folder Include="Infrastructure/Repositories/" />
+    <Folder Include="Presentation/" />
+    <Folder Include="Presentation/Controllers/" />
+    <Folder Include="Presentation/DTOs/" />
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,7 +10,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
+{   
+    app.MapScalarApiReference(opt => {
+        opt.Title = "Hello developers of IKEA INTER";
+        opt.Theme = ScalarTheme.Mars;
+        opt.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
     app.MapOpenApi();
 }
 
