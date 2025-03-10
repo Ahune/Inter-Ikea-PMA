@@ -7,4 +7,5 @@ public interface IProductService
     Task<Product> GetProductDetailsAsync(int id);
     Task<IEnumerable<Product>> GetProductListAsync();
     Task AddProductAsync(Product product);
+    Task<bool> IsProductNameUniqueAsync(string name);
 }
