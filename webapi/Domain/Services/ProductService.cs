@@ -19,9 +19,11 @@ public class ProductService : IProductService
     {
         _logger.LogInformation("Fetching details for product with ID: {ProductId}", id);
         var product = await _productRepository.GetByIdAsync(id);
+
         if (product == null)
         {
             _logger.LogWarning("Product with ID: {ProductId} not found", id);
+            throw new KeyNotFoundException($"Product with ID: {id} not found");
         }
         return product;
     }
@@ -35,9 +37,16 @@ public class ProductService : IProductService
     public async Task AddProductAsync(Product product)
     {
         _logger.LogInformation("Adding new product with name: {ProductName}", product.Name);
-        await _productRepository.AddAsync(product);
-        _logger.LogInformation("Product with name: {ProductName} added successfully", product.Name);
-        
+        try
+        {
+            await _productRepository.AddAsync(product);
+            _logger.LogInformation("Product with name: {ProductName} added successfully", product.Name);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex, "Failed to add product with name: {ProductName}", product.Name);
+            throw;
+        }
     }
 
     public async Task<bool> IsProductNameUniqueAsync(string name)
