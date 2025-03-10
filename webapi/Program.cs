@@ -1,7 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using ProductManagementApp.Infrastructure.Persistence;
 using Scalar.AspNetCore;
+using webapi.Application.Interfaces;
+using webapi.Application.Mappings;
+using webapi.Application.Services;
+using webapi.Domain.Interfaces.Repositories;
+using webapi.Domain.Interfaces.Services;
+using webapi.Domain.Services;
 using webapi.Infrastructure.Persistance;
+using webapi.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +32,15 @@ public static class WebApplicationBuilderExtensions
     {
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
+
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IProductService, ProductService>(); 
+        builder.Services.AddScoped<IProductAppService, ProductAppService>();
     }
+
 }
 
 public static class WebApplicationExtensions
