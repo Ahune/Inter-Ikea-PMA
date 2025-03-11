@@ -33,11 +33,23 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowMultipleOrigins", builder =>
+            {
+                builder.WithOrigins(
+                    "http://localhost:5173", // npm run dev
+                    "http://localhost:4173/") // npm run preview
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
-        builder.Services.AddScoped<IProductService, ProductService>(); 
+        builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IProductAppService, ProductAppService>();
     }
 
@@ -47,6 +59,7 @@ public static class WebApplicationExtensions
 {
     public static void ConfigurePipeline(this WebApplication app, IWebHostEnvironment environment)
     {
+
         if (environment.IsDevelopment())
         {
             app.MapScalarApiReference(opt =>
@@ -57,7 +70,7 @@ public static class WebApplicationExtensions
             });
             app.MapOpenApi();
         }
-
+        app.UseCors("AllowMultipleOrigins");
         app.UseHttpsRedirection();
         app.MapControllers();
     }
