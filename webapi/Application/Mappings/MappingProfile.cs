@@ -12,7 +12,7 @@ public class MappingProfile : Profile
         CreateMap<Product, ProductListResponse>();
         CreateMap<Product, ProductDetailsResponse>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType.Name))
-            .ForMember(dest => dest.Colours, opt => opt.MapFrom(src => src.ProductColours.Select(pc => pc.Colour.ProductColours)));
+            .ForMember(dest => dest.Colours, opt => opt.MapFrom(src => src.ProductColours.Select(pc => pc.Colour.Name)));
         CreateMap<ProductRequest, Product>()
             .ForMember(dest => dest.ProductColours, opt => opt.MapFrom(src => src.ColourIds.Select(colourId => new ProductColour { ColourId = colourId })));
     }
