@@ -11,7 +11,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductCreated}) => {
   const [productType, setProductType] = useState<string>('');
   const [colours, setColours] = useState<number[]>([]);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
-  const [availableColours, setAvailableColours] = useState<Colour[]>([]);
+  const [availableColours, setAvailableColours] = useState<Colour[]>([]);   
+  const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +37,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductCreated}) => {
     };
     try {
       await addProduct(productData);
-      alert('Product added successfully');
+      setSuccessMessage(true); 
+      setTimeout(() => setSuccessMessage(false), 3500); 
       setName('');
       setProductType('');
       setColours([]);
@@ -68,9 +70,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductCreated}) => {
       </div>
       <div>
         <label>Colours:</label>
+        <label className='italic-label'>Hold CTRL or CMD and click for making multiple choices</label>
         <select
           multiple
-          value={colours.map(String)} // Convert number array to string array for the select element
+          value={colours.map(String)}
           onChange={(e) =>
             setColours([...e.target.selectedOptions].map((option) => Number(option.value)))
           }
@@ -81,6 +84,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductCreated}) => {
         </select>
       </div>
       <button type="submit">Add Product</button>
+      {successMessage && <label className='label-success-message'>Product added successfully!</label>}
     </form>
   );
 };
