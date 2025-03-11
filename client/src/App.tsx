@@ -8,9 +8,9 @@ function App() {
     <Router>
       <div>
         <nav>
-          <ul>
-            <li><Link to="/">Create Product</Link></li>
-            <li><Link to="/products">Product List</Link></li>
+          <ul className="ikea-nav">
+            <li className="ikea-nav-item"><Link to="/">Create Product</Link></li>
+            <li className="ikea-nav-item"><Link to="/products">Product List</Link></li>
           </ul>
         </nav>
         <Routes>
